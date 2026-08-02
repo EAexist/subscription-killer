@@ -1,51 +1,55 @@
 import { TestAppGoogleLoginButton } from "@/components/shared/TestAppGoogleLoginButton";
 import { Container } from "@/components/ui/container";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Section } from "@/components/ui/section";
-import { Separator } from "@/components/ui/separator";
 import { getAppUser } from "@/lib/api";
 import { ensureMsw } from "@/lib/msw";
 import { DefaultLayout } from "@/templates/DefaultLayout";
 import { Mail } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { GoogleAccount, GoogleAccountItem } from "./_components/GoogleAccountItem";
+import {
+  GoogleAccount,
+  GoogleAccountItem,
+} from "./_components/GoogleAccountItem";
 
 type AppUserResponse = {
-    id: string;
-    name: string;
-    googleAccounts: GoogleAccount[];
+  id: string;
+  name: string;
+  googleAccounts: GoogleAccount[];
 };
 
 type Props = {
-    params: Promise<{ locale: string }>;
+  params: Promise<{ locale: string }>;
 };
 
 const SettingsPage = async ({ params }: Props) => {
+  await ensureMsw();
 
-    await ensureMsw();
+  const t = await getTranslations("settings");
 
-    const t = await getTranslations("settings");
-
-    let appUser: AppUserResponse | null = null;
-    try {
-        const response = await getAppUser();
-        if (!response.error && response.data) {
-            appUser = response.data as AppUserResponse;
-        }
-    } catch (error) {
-        console.error('Failed to fetch user data:', error);
+  let appUser: AppUserResponse | null = null;
+  try {
+    const response = await getAppUser();
+    if (!response.error && response.data) {
+      appUser = response.data as AppUserResponse;
     }
+  } catch (error) {
+    console.error("Failed to fetch user data:", error);
+  }
 
-    return (
-        <DefaultLayout>
-            <Container>
-                <h1 className="text-xl font-semibold pt-4">{t("title")}</h1>
-                {/* Page Header */}
-
-                <Separator className="my-4" />
-
-                {/* User Profile Section */}
-                {/* <div className="space-y-6">
+  return (
+    <DefaultLayout>
+      <Container>
+        <h1 className="text-lg font-semibold py-4">{t("title")}</h1>
+        {/* Page Header */}
+        {/* User Profile Section */}
+        {/* <div className="space-y-6">
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <User className="h-5 w-5 text-primary" />
@@ -84,51 +88,46 @@ const SettingsPage = async ({ params }: Props) => {
 
                         <Separator className="my-8" /> */}
 
-                {/* <Separator className="my-2" /> */}
-                {/* Google Accounts Section */}
-                <Section
-                    className="py-4 gap-4"
-                >
-                    <h2 className="text-lg font-medium">{t("googleAccounts.title")}</h2>
+        {/* <Separator className="my-2" /> */}
+        {/* Google Accounts Section */}
+        <Section className="py-8 gap-4">
+          <h2 className="text-md font-medium">{t("googleAccounts.title")}</h2>
 
-                    {appUser?.googleAccounts && appUser.googleAccounts.length > 0 ? (
-                        <ul className="grid grid-cols-1 gap-4 max-w-sm">
-                            {appUser.googleAccounts.map((account, index) => (
-                                <li key={index}>
-                                    <GoogleAccountItem
-                                        account={account}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <Empty className="border border-solid">
-                            <EmptyHeader>
-                                <EmptyMedia variant="icon">
-                                    <Mail className="h-6 w-6" />
-                                </EmptyMedia>
-                                <EmptyTitle>{t("googleAccounts.noAccounts")}</EmptyTitle>
-                                <EmptyDescription>{t("googleAccounts.connectPrompt")}</EmptyDescription>
-                            </EmptyHeader>
-                        </Empty>
-                    )}
-                </Section>
+          {appUser?.googleAccounts && appUser.googleAccounts.length > 0 ? (
+            <ul className="grid grid-cols-1 gap-4 max-w-sm">
+              {appUser.googleAccounts.map((account, index) => (
+                <li key={index}>
+                  <GoogleAccountItem account={account} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <Empty className="border border-solid">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <Mail className="h-6 w-6" />
+                </EmptyMedia>
+                <EmptyTitle>{t("googleAccounts.noAccounts")}</EmptyTitle>
+                <EmptyDescription>
+                  {t("googleAccounts.connectPrompt")}
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          )}
+        </Section>
 
-                <Separator className="my-2" />
-
-                {/* Add Google Account Section */}
-                <Section
-                    className="py-4 gap-4">
-                    <div className="py-4 flex flex-col gap-4">
-                        <h2 className="text-lg font-medium">{t("addAccount.title")}</h2>
-                        <div className="max-w-sm">
-                            <TestAppGoogleLoginButton />
-                        </div>
-                    </div>
-                </Section>
-            </Container>
-        </DefaultLayout >
-    );
+        {/* Add Google Account Section */}
+        <Section className="py-8 gap-4">
+          <div className="py-4 flex flex-col gap-4">
+            <h2 className="text-md font-medium">{t("addAccount.title")}</h2>
+            <div className="max-w-sm">
+              <TestAppGoogleLoginButton />
+            </div>
+          </div>
+        </Section>
+      </Container>
+    </DefaultLayout>
+  );
 };
 
 export default SettingsPage;
