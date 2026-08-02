@@ -9,6 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { getIsAuthenticated } from "@/lib/auth";
 import { Menu, X } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
@@ -20,8 +21,7 @@ export const Navbar = async () => {
   const commonT = await getTranslations("common");
   const t = await getTranslations("components.Navbar");
 
-  //   const isAuthenticated = await getIsAuthenticated();
-  const isAuthenticated = true;
+  const isAuthenticated = await getIsAuthenticated();
 
   const NAV_LINKS = [
     { name: t("dashboard"), href: "/dashboard" },
