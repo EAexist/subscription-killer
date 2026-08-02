@@ -11,7 +11,7 @@
     Next.js Web App
     <br />
     <br />
-    <a href="https://sublog-sobalab.vercel.app/ko" target="_blank" rel="noopener noreferrer">View Demo</a>
+    <a href="https://sublog-sobalab.vercel.app" target="_blank" rel="noopener noreferrer">View Demo</a>
   </p>
 </div>
 
@@ -35,7 +35,7 @@ For introduction of the app, please refer to following repo of the API server.
 
 ## Getting Started
 
-<a href="https://sublog-sobalab.vercel.app/ko" target="_blank" rel="noopener noreferrer">View Demo</a>
+<a href="https://sublog-sobalab.vercel.app" target="_blank" rel="noopener noreferrer">View Demo</a>
 
 <!-- LICENSE -->
 
